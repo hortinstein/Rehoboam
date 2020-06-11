@@ -16,9 +16,9 @@ process.on('uncaughtException', function(err) {
 });    
 
 var media_list = {
-    "cnn": "https://www.cnn.com",
-    "foxnews": "https://www.foxnews.com/",
-    "msnbc": "https://www.msnbc.com"
+    "cnn": "https://www.cnn.com"//,
+    //"foxnews": "https://www.foxnews.com/",
+    //"msnbc": "https://www.msnbc.com"
 }  
 
 const puppeteer = require('puppeteer');
@@ -34,14 +34,77 @@ async function doScreenCapture(url, site_name) {
     ]
   });
   const page = await browser.newPage();
-  await page.goto(url, {waitUntil: 'domcontentloaded'});  
-  await page.waitFor(10000);
+  
+  
+  console.log("fetching "+site_name);
+  //these awaits attempt to wait until the page is fully loaded
+  //different options listed here:
+  //https://stackoverflow.com/questions/52497252/puppeteer-wait-until-page-is-completely-loaded
+ 
+  //sets viewport that allows to control the height and width of the image captures
+  await page.setViewport({
+    width: 1600,
+    height: 3200,
+  });
+  
+  await page.goto(url, { waitUntil: 'load' });
+  await page.goto(url, { waitUntil: 'domcontentloaded' });
+  await page.goto(url, { waitUntil: 'networkidle0' });
+  await page.goto(url, { waitUntil: 'networkidle2' });
+  console.log("completed: "+site_name);
+  //await page.waitFor(10000);  
+  
+  await page.setViewport({
+    width: 1600,
+    height: 3200,
+  });
+    
   await page.screenshot({
-    fullPage: true,
-    path:`${site_name}.png`
+    //fullPage: true,
+    path:`${site_name}.png`,
+    //comment this section out to not clip the size of this page
+    clip: {
+      x: 0,
+      y: 0,
+      width: 800,
+      height: 1600,
+    },
   });
   await browser.close();
 }
-doScreenCapture("https://www.cnn.com","cnn");
-doScreenCapture("https://www.foxnews.com","fox");
-doScreenCapture("https://www.msnbc.com","msnbc");
+
+async function screenSources(media_list){
+  for (source in media_list){
+    await doScreenCapture(media_list[source],source);
+  }
+
+}
+
+async function ocrSource(media_list){
+
+  const tesseract = require("node-tesseract-ocr")
+ 
+  const config = {
+    lang: "eng",
+    oem: 1,
+    psm: 3,
+  }
+ 
+  for (source in media_list){
+    console.log("OCR: ",media_list[source]);
+    tesseract.recognize(`${source}.png`, config)
+    .then(text => {
+      console.log(media_list[source]," Result:", text)
+    })
+    .catch(error => {
+      console.log(error.message)
+    })
+  }
+    
+}
+  
+async function runScreenAndOCR(media_list){
+  await screenSources(media_list);
+  await ocrSource(media_list);
+}
+runScreenAndOCR(media_list);
