@@ -20,8 +20,9 @@ then you can run it with the following command
 ```
 #creates the output folder
 $ mkdir out
+$ npm install 
 $ ocr_api={MY_OCR_API} node index.js 
-
+```
 #TODO:
 - Error handling
 - Paralelize retrieval of each site
