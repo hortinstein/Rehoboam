@@ -1,0 +1,6 @@
+image:
+  file: .devcontainer/Dockerfile
+
+tasks:
+  - init: yarn install
+    command: yarn run start
