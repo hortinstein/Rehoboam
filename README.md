@@ -17,9 +17,8 @@ After the environment is built, you will need an api key for the OCR service fro
 http://ocr.space/OCRAPI
 
 then you can run it with the following command
-```
+```sh
 #creates the output folder
-$ mkdir out 
 $ ocr_api={MY_OCR_API} node index.js 
 ```
 #TODO:
