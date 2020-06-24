@@ -10,15 +10,10 @@ const testFolder = 'tmp/';
 
 const dirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory())
 
-//console.log(dist)       
-process.on('uncaughtException', function(err) {
-    console.log(err);
-});    
-
 var media_list = {
-    "cnn": "https://www.cnn.com"//,
-    //"foxnews": "https://www.foxnews.com/",
-    //"msnbc": "https://www.msnbc.com"
+    "cnn": "https://www.cnn.com",
+    "foxnews": "https://www.foxnews.com/",
+    "msnbc": "https://www.msnbc.com"
 }  
 
 const puppeteer = require('puppeteer');
@@ -47,10 +42,10 @@ async function doScreenCapture(url, site_name) {
     height: 3200,
   });
   
-  await page.goto(url, { waitUntil: 'load' });
-  await page.goto(url, { waitUntil: 'domcontentloaded' });
-  await page.goto(url, { waitUntil: 'networkidle0' });
-  await page.goto(url, { waitUntil: 'networkidle2' });
+  await page.goto(url, { waitUntil: 'load', timeout: 0 });
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 0 });
+  await page.goto(url, { waitUntil: 'networkidle0', timeout: 0 });
+  await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
   console.log("completed: "+site_name);
   //await page.waitFor(10000);  
   
@@ -63,12 +58,6 @@ async function doScreenCapture(url, site_name) {
     //fullPage: true,
     path:`${site_name}.png`,
     //comment this section out to not clip the size of this page
-    clip: {
-      x: 0,
-      y: 0,
-      width: 800,
-      height: 1600,
-    },
   });
   await browser.close();
 }
