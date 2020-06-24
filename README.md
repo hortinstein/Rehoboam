@@ -19,8 +19,7 @@ http://ocr.space/OCRAPI
 then you can run it with the following command
 ```
 #creates the output folder
-$ mkdir out
-$ npm install 
+$ mkdir out 
 $ ocr_api={MY_OCR_API} node index.js 
 ```
 #TODO:
