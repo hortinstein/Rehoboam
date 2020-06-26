@@ -2,7 +2,7 @@
 var media_list = {
   "cnn": "https://www.cnn.com",
   "foxnews": "https://www.foxnews.com/",
-  "msnbc": "https://www.msnbc.com",
+  //"msnbc": "https://www.msnbc.com",
   "bbc": "https://www.bbc.com/news",
   "aljazeera": "https://www.aljazeera.com/",
   "nytimes": "https://www.nytimes.com/",
@@ -72,7 +72,8 @@ async function output_string_to_file(path,string){
 
 //performs that actual capture of the screen
 async function doScreenCapture(url, site_name) {
-  const browser = await puppeteer.launch({
+try {
+    const browser = await puppeteer.launch({
     args: [
       // Required for Docker version of Puppeteer
       '--no-sandbox',
@@ -108,8 +109,13 @@ async function doScreenCapture(url, site_name) {
     //fullPage: true,
     path:`${OUTDIR}/${TIMESTAMP}/${TIMESTAMP}_${site_name}.png`,
     
-  });
+  })
+}catch (error) {
+  console.log(error);
   await browser.close();
+} finally {
+  await browser.close();
+}
 }
 
 //this function takes screenshots of all of the sites in the media list above
