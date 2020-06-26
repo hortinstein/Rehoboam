@@ -15,6 +15,7 @@ Right now it's a little tought to get running on a home machine, so use this git
 then you can run it with the following command
 ```sh
 #creates the output folder
+$ mkdir out 
 $ node index.js
 ```
 

@@ -107,7 +107,7 @@ async function doScreenCapture(url, site_name) {
   await page.screenshot({
     //fullPage: true,
     path:`${OUTDIR}/${TIMESTAMP}/${TIMESTAMP}_${site_name}.png`,
-    //comment this section out to not clip the size of this page
+    
   });
   await browser.close();
 }
