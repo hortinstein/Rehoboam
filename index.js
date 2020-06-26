@@ -88,8 +88,8 @@ async function doScreenCapture(url, site_name) {
  
   //sets viewport that allows to control the height and width of the image captures
   await page.setViewport({
-    width: 800,
-    height: 1200,
+    width: 1600,
+    height: 3200,
   });
 
   //these awaits attempt to wait until the page is fully loaded
@@ -125,30 +125,6 @@ async function screenSources(media_list){
 
 }
 
-//this function uses local OCR to process each image and pull out a word list
-// a/o Jun 2020 going out to a API in another function to get better fidelity 
-// on the word list
-async function ocrSource(media_list){
-  const tesseract = require("node-tesseract-ocr")
-  const config = {
-    lang: "eng",
-    oem: 1,
-    psm: 3,
-  }
- 
-  //based on results, these will not be used at this time
-  for (source in media_list){
-    console.log("OCR: ",media_list[source]);
-    tesseract.recognize(`${source}.png`, config)
-    .then(text => {
-      console.log(media_list[source]," Result:", text)
-    })
-    .catch(error => {
-      console.log(error.message)
-    })
-  }
-    
-}
 
 //this outputs the file in the format that we will provide by 
 //consumers
@@ -183,6 +159,40 @@ async function tokenize_and_stem(source,ocr_result){
   await output_string_to_file(image_path,JSON.stringify(parsed_result));
 }
 
+
+//this function uses local OCR to process each image and pull out a word list
+// a/o Jun 2020 going out to a API in another function to get better fidelity 
+// on the word list
+async function ocrSource(media_list){
+  const tesseract = require("node-tesseract-ocr")
+  const config = {
+    lang: "eng",
+    oem: 1,
+    psm: 3,
+  }
+ 
+  //based on results, these will not be used at this time
+  for (source in media_list){
+
+    const image_path = `${OUTDIR}/${TIMESTAMP}/${TIMESTAMP}_${source}.png`     
+    
+    console.log("OCR image: ",image_path);
+ 
+    //run local OCR
+    await tesseract.recognize(image_path, config)
+    .then(text => {
+      //console.log(media_list[source]," Result:", text)
+      tokenize_and_stem(source,text);
+      console.log("completed: ",source);
+      console.log(SENTIMENT_OUTPUT);
+    })
+    .catch(error => {
+      console.log(error.message)
+    })
+  }
+    
+}
+
 //this function takes screenshots of all of the sites in the media list above
 async function ocrAPI(media_list){
   for (source in media_list){
@@ -211,8 +221,8 @@ async function ocrAPI(media_list){
 //batch function to perform all of the operations
 async function runScreenAndOCR(media_list){
   await screenSources(media_list);
-  //await ocrSource(media_list);
-  await ocrAPI(media_list);
+  await ocrSource(media_list);
+  //await ocrAPI(media_list);
 
 }
 

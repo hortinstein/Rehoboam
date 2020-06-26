@@ -1,5 +1,5 @@
 {
-  "name": "mediadump",
+  "name": "rehoboam",
   "version": "0.0.1",
   "description": "dumps screenshots of media sources and runs them through OCR/sentiment analysis",
   "main": "index.js",
@@ -9,20 +9,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hortinstein/mediadump.git"
+    "url": "git+https://github.com/hortinstein/rehoboam.git"
   },
   "keywords": [
     "media",
     "screenshot",
     "ocr",
-    "election"
   ],
   "author": "hortinstein",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hortinstein/mediadump/issues"
+    "url": "https://github.com/hortinstein/rehoboam/issues"
   },
-  "homepage": "https://github.com/hortinstein/node_whisky#readme",
+  "homepage": "https://github.com/hortinstein/rehoboam#readme",
   "dependencies": {
     "colors": "^1.3.3",
     "lodash": "^4.17.11",
