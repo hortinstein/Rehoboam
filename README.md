@@ -35,6 +35,14 @@ Higher is more positive, lower is more negative.
 gitpod /workspace/Rehoboam $ 
 ```
 
+You can combine the images in any of the out folders:
+```
+montage *.png -tile 6x1 -geometry +0+0 out.png
+```
+and get a result like this
+
+![alt text](https://github.com/hortinstein/rehoboam/blob/master/side_by_side.png?raw=true)
+
 # Caveats:
 - *SOLVED-ish* Right now images are too small to get a good sample size, this is due to the OCR API limitations on 1 MB.
 - Sentiment will change on one run to another immediately after, this was initially puzzling until I realized it was likely ads
