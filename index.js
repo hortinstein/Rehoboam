@@ -2,7 +2,7 @@
 var media_list = {
   "cnn": "https://www.cnn.com",
   "foxnews": "https://www.foxnews.com/",
-  //"msnbc": "https://www.msnbc.com",
+   "msnbc": "https://www.msnbc.com",
   "bbc": "https://www.bbc.com/news",
   "aljazeera": "https://www.aljazeera.com/",
   "nytimes": "https://www.nytimes.com/",
