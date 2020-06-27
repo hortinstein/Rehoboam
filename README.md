@@ -45,4 +45,7 @@ gitpod /workspace/Rehoboam $
 - Error handling
 - Paralelize retrieval of each site
 - *SOLVED* See if I can get valid OCR working locally with same quality
+- Revamp UI to allow for re-processing of past images
+- Add data about how many words captured versus in OCR how many used
+- Get other ideas about interesting metadata to add to the JSON
 
