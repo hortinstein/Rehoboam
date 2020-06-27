@@ -21,7 +21,7 @@ $ node index.js
 
 # Output 
 
-Defaults to the ```out``` directory, it will output all screens and JSON containing the OCR and sentiment metadata.  An example is in the Examples folder.  Below is an example of the final output of just the script showing combine sentiment.
+Defaults to the ```out``` directory, it will output all screens and JSON containing the OCR and sentiment metadata.  An example is in the ```Example_Data``` folder.  Below is an example of the final output of just the script showing combine sentiment.
 
 Higher is more positive, lower is more negative.
 
