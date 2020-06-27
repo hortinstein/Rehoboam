@@ -16,7 +16,7 @@ then you can run it with the following command
 ```sh
 #creates the output folder
 $ mkdir out 
-$ node index.js
+$ npm start
 ```
 
 # Output 
