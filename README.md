@@ -37,7 +37,7 @@ gitpod /workspace/Rehoboam $
 
 You can combine the images in any of the out folders:
 ```
-montage *.png -tile 6x1 -geometry +0+0 out.png
+montage *.png -tile 7x1 -geometry +0+0 out.png
 ```
 and get a result like this
 
