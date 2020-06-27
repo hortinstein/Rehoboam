@@ -71,26 +71,14 @@ async function output_string_to_file(path,string){
 }    
 
 //performs that actual capture of the screen
-async function doScreenCapture(url, site_name) {
-try {
-    const browser = await puppeteer.launch({
-    args: [
-      // Required for Docker version of Puppeteer
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      // This will write shared memory files into /tmp instead of /dev/shm,
-      // because Docker’s default for /dev/shm is 64MB
-      '--disable-dev-shm-usage'
-    ]
-  });
-  const page = await browser.newPage();
+async function doScreenCapture(page, url, site_name) {
   
   console.log("fetching "+site_name);
  
   //sets viewport that allows to control the height and width of the image captures
   await page.setViewport({
-    width: 1600,
-    height: 3200,
+    width: 1400,
+    height: 2800,
   });
 
   //these awaits attempt to wait until the page is fully loaded
@@ -109,26 +97,35 @@ try {
     //fullPage: true,
     path:`${OUTDIR}/${TIMESTAMP}/${TIMESTAMP}_${site_name}.png`,
     
-  })
-}catch (error) {
-  console.log(error);
-  await browser.close();
-} finally {
-  await browser.close();
-}
+  });
+
 }
 
 //this function takes screenshots of all of the sites in the media list above
 async function screenSources(media_list){
+  const browser = await puppeteer.launch({
+    args: [
+      // Required for Docker version of Puppeteer
+      '--no-sandbox',
+      '--disable-gpu',
+      '--disable-setuid-sandbox',
+      // This will write shared memory files into /tmp instead of /dev/shm,
+      // because Docker’s default for /dev/shm is 64MB
+      '--disable-dev-shm-usage',
+    ]
+  });
+  
   for (source in media_list){
+    const page = await browser.newPage();
     
     //right now this is a hack to get wapo to render...they 
     //have some advanced bot detection that is messing with puppeteer
     if (source === "washingtonpost") {puppeteer.use(StealthPlugin())}
     
-    await doScreenCapture(media_list[source],source);
-  }
-
+    await doScreenCapture(page,media_list[source],source);
+    await page.close();
+}
+  await browser.close();
 }
 
 

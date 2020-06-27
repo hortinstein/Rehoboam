@@ -19,7 +19,23 @@ $ mkdir out
 $ node index.js
 ```
 
-# CAVEATS:
+# Output 
+
+Defaults to the ```out``` directory, it will output all screens and JSON containing the OCR and sentiment metadata.  An example is in the Examples folder.  Below is an example of the final output of just the script showing combine sentiment.
+
+Higher is more positive, lower is more negative.
+
+```sh 
+{ cnn: 18,
+  foxnews: -17,
+  bbc: -65,
+  aljazeera: -34,
+  nytimes: -18,
+  washingtonpost: -7 }
+gitpod /workspace/Rehoboam $ 
+```
+
+# Caveats:
 - *SOLVED-ish* Right now images are too small to get a good sample size, this is due to the OCR API limitations on 1 MB.
 - Sentiment will change on one run to another immediately after, this was initially puzzling until I realized it was likely ads
 - OCR is not great, missing a lot of words, but all metadata is captured for later analysis if  you have other ideas
