@@ -57,3 +57,5 @@ and get a result like this
 - Add data about how many words captured versus in OCR how many used
 - Get other ideas about interesting metadata to add to the JSON
 
+# Cron Command:
+-  ```docker run -v /root/rehoboam/:/home/rehoboam rehoboam:latest node /home/rehoboam/index.js```
