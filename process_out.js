@@ -18,27 +18,32 @@ const dir_list = dirs(OUTDIR);
 
 var DATABASE = {}
 
-function parse_file(fullpath){
+async function parse_file(fullpath){
     var obj = JSON.parse(fs.readFileSync(fullpath, 'utf8'));
-    console.log(obj.sentiment.score);
-    console.log(obj.Source);
+    DATABASE[obj.TimeStamp][obj.Source] = obj.sentiment.score;
 }
 
+async function read_each_directory(dir){
+    fs.readdir(OUTDIR+'/'+dir, (err, files) => {
+        DATABASE[dir] = {}; 
+        files.forEach(file => {
+            if (file.includes( 'json')){
+                console.log(file);
+                parse_file(`${OUTDIR}/${dir}/${file}`);    
+                console.log(DATABASE);
+            }
+        });
+        
+    });
+}
 
 //read all the folders in the 
-function parse_all_folders(){
+async function parse_all_folders(){
     dir_list.forEach(dir => {
         console.log(dir);
-        fs.readdir(OUTDIR+'/'+dir, (err, files) => {
-            files.forEach(file => {
-                if (file.includes( 'json')){
-                    console.log(file);
-                    parse_file(`${OUTDIR}/${dir}/${file}`);    
-                }
-            });
-            
-        });
+        read_each_directory(dir); 
     });
+    console.log(DATABASE);
 }
 
 parse_all_folders();
