@@ -16,14 +16,23 @@ const dirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory())
 //gives us a list of directories to process
 const dir_list = dirs(OUTDIR);
 
+var DATABASE = {}
 
+function parse_file(fullpath){
+    var obj = JSON.parse(fs.readFileSync(fullpath, 'utf8'));
+    console.log(obj)
+}
+
+
+//read all the folders in the 
 function parse_all_folders(){
     dir_list.forEach(dir => {
         console.log(dir);
         fs.readdir(OUTDIR+'/'+dir, (err, files) => {
             files.forEach(file => {
                 if (file.includes( 'json')){
-                    console.log(file);    
+                    console.log(file);
+                    parse_file(`${OUTDIR}/${dir}/${file}`);    
                 }
             });
             
