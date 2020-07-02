@@ -58,4 +58,10 @@ and get a result like this
 - Get other ideas about interesting metadata to add to the JSON
 
 # Cron Command:
--  ```docker run -v /root/rehoboam/:/home/rehoboam rehoboam:latest node /home/rehoboam/index.js```
+
+This cron command runs rehoboam every hour
+```
+0 * * * * time docker run --name rehoboam -v /root/rehoboam/:/home/rehoboam rehoboam:latest node /home/rehoboam/index.js >> /root/rehoboam/out/rehoboam.log.txt 2>&1
+55 * * * * docker kill rehoboam
+57 * * * * docker rm rehoboam
+```

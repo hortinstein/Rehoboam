@@ -11,23 +11,9 @@ var media_list = {
 
 var SENTIMENT_OUTPUT = {};
 
-//ocr API key
-const OCR_API_KEY = process.env.ocr_api;
-
-const ocrSpaceApi = require('ocr-space-api');
- 
-var OCR_OPTIONS =  { 
-    apikey: OCR_API_KEY,
-    language: 'eng', // Português
-    imageFormat: 'image/png', // Image Type (Only png ou gif is acceptable at the moment i wrote this)
-    isOverlayRequired: false
-  };
-
 //destination folder for all processed images and metadata
 const OUTDIR = 'out';
 
-const _ = require('lodash');
-const colors = require('colors');
 const fs = require("fs");
 var natural = require('natural');
 var Sentiment = require('sentiment');
@@ -48,18 +34,11 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 //timestamped for the dump of the files
 const TIMESTAMP = Math.floor(new Date() / 1000);
 
+//create the path start
+const PATHSTART = `${OUTDIR}/${TIMESTAMP}/${TIMESTAMP}`;
+
 //create a new directory for the timestamp
 fs.mkdirSync(OUTDIR+"/"+TIMESTAMP);    
-
-//for folder reading
-const { readdirSync, statSync } = require('fs');
-const { join } = require('path');
-
-//definaes a simple function to read all of the directories 
-const dirs = p => readdirSync(p).filter(f => statSync(join(p, f)).isDirectory())
-
-//gives us a list of directories to process
-const dir_list = dirs(OUTDIR);
 
 //used to output JSON to a file for later parsing.
 async function output_string_to_file(path,string){
@@ -95,7 +74,7 @@ async function doScreenCapture(page, url, site_name) {
   //retrieves a screenshot of the page
   await page.screenshot({
     //fullPage: true,
-    path:`${OUTDIR}/${TIMESTAMP}/${TIMESTAMP}_${site_name}.png`,
+    path:`${PATHSTART}_${site_name}.png`,
     
   });
 
@@ -132,11 +111,11 @@ async function screenSources(media_list){
 //this outputs the file in the format that we will provide by 
 //consumers
 async function tokenize_and_stem(source,ocr_result){
-  const image_path = `${OUTDIR}/${TIMESTAMP}/${TIMESTAMP}_${source}.png`
+  const image_path = `${PATHSTART}_${source}.png`
   
   console.log("running tokenization and sentiment analysis: "+source);
+  
   var parsed_result = {};
-
   parsed_result.ImagePath = image_path
   parsed_result.TimeStamp = TIMESTAMP;
   parsed_result.Source = source;
@@ -157,7 +136,6 @@ async function tokenize_and_stem(source,ocr_result){
 
   console.log("sentiment score: "+ sentiment_result["score"]);
   
-  
   //output it all to a string
   await output_string_to_file(image_path,JSON.stringify(parsed_result));
 }
@@ -177,14 +155,13 @@ async function ocrSource(media_list){
   //based on results, these will not be used at this time
   for (source in media_list){
 
-    const image_path = `${OUTDIR}/${TIMESTAMP}/${TIMESTAMP}_${source}.png`     
+    const image_path = `${PATHSTART}_${source}.png`     
     
     console.log("OCR image: ",image_path);
  
     //run local OCR
     await tesseract.recognize(image_path, config)
     .then(text => {
-      //console.log(media_list[source]," Result:", text)
       tokenize_and_stem(source,text);
       console.log("completed: ",source);
       console.log(SENTIMENT_OUTPUT);
@@ -196,37 +173,10 @@ async function ocrSource(media_list){
     
 }
 
-//this function takes screenshots of all of the sites in the media list above
-async function ocrAPI(media_list){
-  for (source in media_list){
-    const image_path = `${OUTDIR}/${TIMESTAMP}/${TIMESTAMP}_${source}.png`     
-    
-    console.log("OCR image: ",image_path);
- 
-    // Run and wait the result
-    await ocrSpaceApi.parseFromLocalFile(image_path, OCR_OPTIONS)
-    .then(function (parsedResult) {
-      var parsedResult = JSON.parse(parsedResult);
-      
-      console.log('result: \n', parsedResult);
-      
-      tokenize_and_stem(source,parsedResult["ParsedResults"][0]["ParsedText"]);
-      console.log("completed: ",source);
-      
-      console.log(SENTIMENT_OUTPUT);
-    }).catch(function (err) {
-      console.log('ERROR:', err);
-    });
-  }
-
-}
-
 //batch function to perform all of the operations
 async function runScreenAndOCR(media_list){
   await screenSources(media_list);
   await ocrSource(media_list);
-  //await ocrAPI(media_list);
-
 }
 
 runScreenAndOCR(media_list);
