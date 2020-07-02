@@ -20,7 +20,8 @@ var DATABASE = {}
 
 function parse_file(fullpath){
     var obj = JSON.parse(fs.readFileSync(fullpath, 'utf8'));
-    console.log(obj)
+    console.log(obj.sentiment.score);
+    console.log(obj.Source);
 }
 
 
