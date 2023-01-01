@@ -25,7 +25,7 @@
   "dependencies": {
     "colors": "^1.3.3",
     "lodash": "^4.17.11",
-    "natural": "^2.1.5",
+    "natural": "^2.4.5",
     "node-tesseract-ocr": "^2.0.0",
     "ocr-space-api": "dennnisk/ocr-space-api#master",
     "puppeteer": "^3.0.4",
